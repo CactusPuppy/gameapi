@@ -1,0 +1,155 @@
+plugins {
+    id 'base'
+    id 'java-library'
+    id 'maven-publish'
+    id 'kr.entree.spigradle' version '1.2.4'
+    id "io.freefair.lombok" version "5.1.0"
+}
+
+group 'com.github.cactuspuppy'
+version '1.0-SNAPSHOT'
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'https://jitpack.io' }
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+
+        // As of Gradle 5.1, you can limit this to only those
+        // dependencies you expect from it
+        content {
+            includeGroup 'org.bukkit'
+            includeGroup 'org.spigotmc'
+        }
+    }
+}
+
+dependencies {
+    compileOnly spigot()
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+    implementation "com.google.guava:guava:29.0-jre"
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compileOnly group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation group: 'commons-io', name: 'commons-io', version: '2.7'
+    compileOnly 'org.jetbrains:annotations:16.0.2'
+    testImplementation 'com.github.seeseemelk:MockBukkit:v1.15-SNAPSHOT'
+    testCompile "org.mockito:mockito-core:3.3.+"
+}
+
+spigot {
+    authors = ['CactusPuppy']
+    depends = []
+    apiVersion = '1.15'
+    load = STARTUP
+    //noinspection GroovyAssignabilityCheck
+    commands {
+        gapi {
+            aliases = ['ga', 'game']
+            description = 'Base Game API command'
+            permission = 'gapi.cmd'
+            permissionMessage = 'No permission, contact server administrators'
+            usage = '/gapi [command]'
+        }
+    }
+    //noinspection GroovyAssignabilityCheck
+    permissions {
+        'gapi.*' {
+            description = 'Wildcard permission for Game API'
+            defaults = 'op'
+            children = ['gapi.cmd': true, 'gapi.cmd.start': true, 'gapi.cmd.reset': true, 'gapi.cmd.save': true, 'gapi.cmd.load': true]
+        }
+        'gapi.cmd' {
+            description = 'Allows access to the Game API command'
+            defaults = 'op'
+        }
+        'gapi.cmd.start' {
+            description = 'Allows access to the `/game start` command'
+            defaults = 'op'
+        }
+        'gapi.cmd.reset' {
+            description = 'Allows access to the `/game reset` command'
+            defaults = 'op'
+        }
+        'gapi.cmd.save' {
+            description = 'Allows access to the `/game save` command'
+            defaults = 'op'
+        }
+        'gapi.cmd.load' {
+            description = 'Allows access to the `/game load` command'
+            defaults = 'op'
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+configurations {
+    testCompile.extendsFrom compileOnly
+}
+
+jar {
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'game-api'
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'Game API'
+                description = 'PaperMC plugin designed to run games'
+                url = 'http://www.crashtc.com/gameapi'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'cactuspuppy'
+                        name = 'CactusPuppy'
+                        email = 'puppycactus@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+task copyPluginYaml(type: Copy, dependsOn: spigotPluginYaml) {
+    from(new File(spigotPluginYaml.temporaryDir, "plugin.yml"))
+    into(sourceSets.test.resources.srcDirs[0])
+}
+tasks.test.dependsOn(copyPluginYaml)
