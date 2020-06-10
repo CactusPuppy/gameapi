@@ -1,0 +1,22 @@
+main: com.github.cactuspuppy.gameapi.GameAPI
+name: GameAPI
+version: 1.0-SNAPSHOT
+authors: [CactusPuppy]
+api-version: '1.15'
+load: STARTUP
+commands:
+  gapi:
+    description: Base Game API command
+    usage: /gapi [command]
+    permission: gapi.cmd
+    permission-message: No permission, contact server administrators
+    aliases: [ga, game]
+permissions:
+  gapi.*:
+    description: Wildcard permission for Game API
+    default: op
+    children:
+      gapi.cmd: true
+  gapi.cmd:
+    description: Allows access to the Game API command
+    default: op

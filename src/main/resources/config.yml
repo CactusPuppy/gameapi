@@ -1,0 +1,11 @@
+# Current game
+game: "Find Your Friend UHC"
+
+################
+# START CONFIG #
+################
+start:
+  countdown: # Game start countdown stuff
+    chat-freq: 15 # How often to output a chat message while countdown is happening. Clamped to a minimum of 5.
+    title-start: 10 # When to start showing a title for the countdown
+
