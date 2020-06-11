@@ -17,6 +17,22 @@ permissions:
     default: op
     children:
       gapi.cmd: true
+      gapi.cmd.start: true
+      gapi.cmd.reset: true
+      gapi.cmd.save: true
+      gapi.cmd.load: true
   gapi.cmd:
     description: Allows access to the Game API command
+    default: op
+  gapi.cmd.load:
+    description: Allows access to the `/game load` command
+    default: op
+  gapi.cmd.reset:
+    description: Allows access to the `/game reset` command
+    default: op
+  gapi.cmd.save:
+    description: Allows access to the `/game save` command
+    default: op
+  gapi.cmd.start:
+    description: Allows access to the `/game start` command
     default: op

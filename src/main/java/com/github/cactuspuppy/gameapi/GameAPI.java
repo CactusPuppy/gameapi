@@ -2,7 +2,7 @@ package com.github.cactuspuppy.gameapi;
 
 import com.github.cactuspuppy.gameapi.game.Game;
 import com.github.cactuspuppy.gameapi.game.GameRegistrar;
-import com.github.cactuspuppy.gameapi.utils.FileConfig;
+import com.github.cactuspuppy.gameapi.utils.config.FileConfig;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

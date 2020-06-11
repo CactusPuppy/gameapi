@@ -1,5 +1,6 @@
 package com.github.cactuspuppy.gameapi.utils;
 
+import com.github.cactuspuppy.gameapi.utils.config.Config;
 import com.google.common.io.Files;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterAll;

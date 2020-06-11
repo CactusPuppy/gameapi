@@ -6,6 +6,15 @@ game: "Find Your Friend UHC"
 ################
 start:
   countdown: # Game start countdown stuff
-    chat-freq: 15 # How often to output a chat message while countdown is happening. Clamped to a minimum of 5.
+    default-delay: 15 # If no delay is passed in, use this value by default (secs)
+    chat-freq: 15 # How often to output a chat message while countdown is happening (secs). Clamped to a minimum of 5.
     title-start: 10 # When to start showing a title for the countdown
-
+  # If the start command is called without arguments during a countdown, use this behavior:
+  # IMMEDIATE-START     Start the game immediately
+  # SHORTEN-COOLDOWN    If the countdown has more than 10 seconds left, shorten to 10 seconds.
+  #                     Otherwise, shorten the cooldown to 5 seconds (cannot lengthen the cooldown)
+  # DEFAULT-DELAY       Override the current countdown with a default-delay countdown
+  # CANCEL-COUNTDOWN    Cancel the current cooldown without starting a new one
+  #
+  # If no behavior is specified, uses SHORTEN-COOLDOWN
+  override-behavior: 'SHORTEN-COOLDOWN'

@@ -1,4 +1,4 @@
-package com.github.cactuspuppy.gameapi.utils;
+package com.github.cactuspuppy.gameapi.utils.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
